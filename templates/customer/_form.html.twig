@@ -1,0 +1,29 @@
+{{ form_start(form) }}
+<div class="container">
+	<div class="my-custom-class-for-errors">
+		{{ form_errors(form) }}</div>
+	<div class="row">
+		<div class="col-md-8">
+			{{ form_row(form.imagen) }}
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			{{ form_row(form.nombre) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			{{ form_row(form.titulo) }}
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-12">
+			{{ form_row(form.opinion) }}
+		</div>
+	</div>
+	<div class="row">
+		<button class="btn">{{ button_label|default('Guardar') }}</button>
+	</div>
+</div>
+{{ form_end(form) }}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Customer{% endblock %}
+
+{% block principal %}
+</div>
+    <h1>Customer</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ customer.id }}</td>
+            </tr>
+            <tr>
+                <th>Imagen</th>
+                <td><img src="{{ asset(customer.getUrlCustomers()) }}" alt="{{ customer.imagen }}" width="100px"></td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ customer.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Titulo</th>
+                <td>{{ customer.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Opinion</th>
+                <td>{{ customer.opinion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_customer_index') }}">back to list</a>
+
+    <a href="{{ path('app_customer_edit', {'id': customer.id}) }}">edit</a>
+
+    {{ include('customer/_delete_form.html.twig') }}
+{% endblock %}

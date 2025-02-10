@@ -24,7 +24,7 @@ class Food
     private ?string $descripcion = null;
 
     #[ORM\Column]
-    private ?int $precio = null;
+    private ?float $precio = null;
 
     #[ORM\ManyToOne(inversedBy: 'food')]
     #[ORM\JoinColumn(nullable: false)]

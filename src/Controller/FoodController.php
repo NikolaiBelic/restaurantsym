@@ -28,14 +28,20 @@ final class FoodController extends AbstractController
         $food = new Food();
         $form = $this->createForm(FoodType::class, $food);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            // $file almacena el archivo subido
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $form['imagen']->getData();
+            // Generamos un nombre único
+            $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+            // Move the file to the directory where brochures are stored
+            $file->move($this->getParameter('images_directory_food'), $fileName);
+            // Actualizamos el nombre del archivo en el objeto imagen al nuevo generado
+            $food->setImagen($fileName);
             $entityManager->persist($food);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_food_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->render('food/new.html.twig', [
             'food' => $food,
             'form' => $form,

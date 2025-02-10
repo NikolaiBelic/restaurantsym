@@ -22,11 +22,11 @@
         {% for food in food %}
             <tr>
                 <td>{{ food.id }}</td>
-                <td>{{ food.imagen }}</td>
+                <td><img src="{{ asset(food.getUrlFood()) }}" alt="{{ food.imagen }}" width="100px"></td>
                 <td>{{ food.nombre }}</td>
                 <td>{{ food.categoria }}</td>
                 <td>{{ food.descripcion }}</td>
-                <td>{{ food.precio }}</td>
+                <td>{{ food.precio|number_format(2, '.', ',') }}</td>
                 <td>
                     <a href="{{ path('app_food_show', {'id': food.id}) }}">show</a>
                     <a href="{{ path('app_food_edit', {'id': food.id}) }}">edit</a>

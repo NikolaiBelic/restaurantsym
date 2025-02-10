@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CustomerRepository;
+use App\Repository\FoodRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,9 +33,10 @@ class ProyectoController extends AbstractController
     }
 
     #[Route('/menu', name: 'sym_menu')]
-    public function menu() 
+    public function menu(FoodRepository $foodRepository) 
     {
         return $this->render('menu.view.html.twig', [
+            'food' => $foodRepository->findAll(),
         ]);
     }
 }

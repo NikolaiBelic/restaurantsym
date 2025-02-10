@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class FoodType extends AbstractType
 {
@@ -48,7 +49,7 @@ class FoodType extends AbstractType
         ->add('categoria', EntityType::class, [
             'class' => Categoria::class
         ])
-        ->add('precio', TextType::class, [
+        ->add('precio', NumberType::class, [
             'label' => 'Precio:',
             'label_attr' => ['class' => 'etiqueta']
         ])

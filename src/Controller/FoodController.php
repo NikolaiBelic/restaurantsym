@@ -6,10 +6,11 @@ use App\Entity\Food;
 use App\Form\FoodType;
 use App\Repository\FoodRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/food')]
 final class FoodController extends AbstractController
@@ -77,11 +78,18 @@ final class FoodController extends AbstractController
     #[Route('/{id}', name: 'app_food_delete', methods: ['POST'])]
     public function delete(Request $request, Food $food, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$food->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $food->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($food);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_food_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}', name: 'app_food_delete_json', methods: ['DELETE'])]
+    public function deleteJson(Food $food, FoodRepository $foodRepository): Response
+    {
+        $foodRepository->remove($food, true);
+        return new JsonResponse(['eliminado' => true]);
     }
 }

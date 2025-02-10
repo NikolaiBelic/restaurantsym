@@ -30,6 +30,7 @@
                 <td>
                     <a href="{{ path('app_food_show', {'id': food.id}) }}">show</a>
                     <a href="{{ path('app_food_edit', {'id': food.id}) }}">edit</a>
+                    <a href="{{ path('app_food_delete_json', {'id': food.id}) }}" class="delete">borrar</a>
                 </td>
             </tr>
         {% else %}

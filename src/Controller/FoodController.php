@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\BLL\FoodBLL;
 use App\Entity\Food;
 use App\Form\FoodType;
 use App\Repository\FoodRepository;
@@ -15,11 +16,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/food')]
 final class FoodController extends AbstractController
 {
-    #[Route(name: 'app_food_index', methods: ['GET'])]
-    public function index(FoodRepository $foodRepository): Response
+    #[Route('/', name: 'app_food_index', methods: ['GET'])]
+    #[Route('/orden/{ordenacion}', name: 'app_food_index_ordenado', methods: ['GET'])]
+    public function index(FoodBLL $foodBLL, string $ordenacion = null): Response 
     {
+        $food = $foodBLL->getFoodConOrdenacion($ordenacion);
         return $this->render('food/index.html.twig', [
-            'food' => $foodRepository->findAll(),
+            'food' => $food
+        ]);
+    }
+
+    #[Route('/busqueda', name: 'app_food_index_busqueda', methods: ['POST'])]
+    public function busqueda(Request $request, FoodRepository $foodRepository): Response
+    {
+        $busqueda = $request->request->get('busqueda');
+        $food = $foodRepository->findLikeNombre($busqueda);
+        return $this->render('food/index.html.twig', [
+            'food' => $food
         ]);
     }
 

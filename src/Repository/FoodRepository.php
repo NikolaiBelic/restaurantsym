@@ -47,4 +47,23 @@ class FoodRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * @return Food[] Returns an array of Imagen objects
+     */
+    public function findLikeNombre(string $value): array
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->Where($qb->expr()->like('i.nombre', ':val'))->setParameter('val', '%' . $value . '%');
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findFoodConCategoria(string $ordenacion, string $tipoOrdenacion)
+    {
+        $qb = $this->createQueryBuilder('food');
+        $qb->addSelect('categoria')
+            ->innerJoin('food.categoria', 'categoria')
+            ->orderBy('food.' . $ordenacion, $tipoOrdenacion);
+        return $qb->getQuery()->getResult();
+    }
 }

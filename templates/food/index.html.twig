@@ -1,45 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Food index{% endblock %}
+{% block title %}Food index
+{% endblock %}
 
 {% block principal %}
 </div>
-    <h1>Food index</h1>
+<h1>Food index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Categoria</th>
-                <th>Descripcion</th>
-                <th>Precio</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for food in food %}
-            <tr>
-                <td>{{ food.id }}</td>
-                <td><img src="{{ asset(food.getUrlFood()) }}" alt="{{ food.imagen }}" width="100px"></td>
-                <td>{{ food.nombre }}</td>
-                <td>{{ food.categoria }}</td>
-                <td>{{ food.descripcion }}</td>
-                <td>{{ food.precio|number_format(2, '.', ',') }}</td>
-                <td>
-                    <a href="{{ path('app_food_show', {'id': food.id}) }}">show</a>
-                    <a href="{{ path('app_food_edit', {'id': food.id}) }}">edit</a>
-                    <a href="{{ path('app_food_delete_json', {'id': food.id}) }}" class="delete">borrar</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<form action="{{ path('app_food_index_busqueda') }}" method="post">
+	<label>Búsqueda:</label>
+	<input type="text" name="busqueda" id="busqueda" value="">
+	<input type="submit" value="Buscar">
+</form>
 
-    <a href="{{ path('app_food_new') }}">Create new</a>
-{% endblock %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				<a href="{{ path("app_food_index_ordenado", {ordenacion: 'id'}) }}">Id</a>
+			</th>
+			<th>Imagen</th>
+			<th>
+				<a href="{{ path("app_food_index_ordenado", {ordenacion: 'nombre'}) }}">Nombre</a>
+			</th>
+			<th>
+				<a href="{{ path("app_food_index_ordenado", {ordenacion: 'categoria'}) }}">Categoria</a>
+			</th>
+			<th>Descripcion</th>
+			<th>Precio</th>
+			<th>actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for food in food %}
+			<tr>
+				<td>{{ food.id }}</td>
+				<td><img src="{{ asset(food.getUrlFood()) }}" alt="{{ food.imagen }}" width="100px"></td>
+				<td>{{ food.nombre }}</td>
+				<td>{{ food.categoria }}</td>
+				<td>{{ food.descripcion }}</td>
+				<td>{{ food.precio|number_format(2, '.', ',') }}</td>
+				<td>
+					<a href="{{ path('app_food_show', {'id': food.id}) }}">show</a>
+					<a href="{{ path('app_food_edit', {'id': food.id}) }}">edit</a>
+					<a href="{{ path('app_food_delete_json', {'id': food.id}) }}" class="delete">borrar</a>
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="6">no records found</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<a href="{{ path('app_food_new') }}">Create new</a>{% endblock %}

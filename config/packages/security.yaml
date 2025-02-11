@@ -4,14 +4,28 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
+            form_login:
+                enable_csrf: true
+                login_path: app_login
+                check_path: app_login
+            # configure the maximum login attempts
+            login_throttling:
+                max_attempts: 3 # por minuto
+                interval: '10 minutes' # tiempo de espera hasta poder volver a intentar acceder
+            logout:
+                path: app_logout
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -22,8 +36,18 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # Necesario ROLE_ADMIN el acceso a /imagen*
+        - { path: ^/food/new, roles: ROLE_ADMIN }
+        - { path: ^/food/edit, roles: ROLE_ADMIN }
+        - { path: ^/food/delete, roles: ROLE_ADMIN }
+        - { path: ^/food/busqueda, roles: ROLE_USER }
+        - { path: ^/customer/new, roles: ROLE_ADMIN }
+        - { path: ^/customer/edit, roles: ROLE_ADMIN }
+        - { path: ^/customer/delete, roles: ROLE_ADMIN }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        # allow unauthenticated users to access the login form
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

@@ -33,6 +33,10 @@ class Food
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $fecha = null;
 
+    #[ORM\ManyToOne(inversedBy: 'food')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $usuario = null;
+
     const RUTA_IMAGENES_FOOD = 'images/food/';
 
     public function getId(): ?int
@@ -113,6 +117,18 @@ class Food
     public function setFecha(?\DateTimeInterface $fecha): static
     {
         $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?User
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?User $usuario): static
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }

@@ -37,10 +37,11 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # Necesario ROLE_ADMIN el acceso a /imagen*
-        - { path: ^/food/new, roles: ROLE_ADMIN }
-        - { path: ^/food/edit, roles: ROLE_ADMIN }
-        - { path: ^/food/delete, roles: ROLE_ADMIN }
-        - { path: ^/food/busqueda, roles: ROLE_USER }
+        #- { path: ^/food/new, roles: ROLE_ADMIN }
+        #- { path: ^/food/edit, roles: ROLE_ADMIN }
+        #- { path: ^/food/delete, roles: ROLE_ADMIN }
+        #- { path: ^/food/busqueda, roles: ROLE_USER }
+        - { path: ^/food, roles: ROLE_USER }
         - { path: ^/customer/new, roles: ROLE_ADMIN }
         - { path: ^/customer/edit, roles: ROLE_ADMIN }
         - { path: ^/customer/delete, roles: ROLE_ADMIN }
@@ -61,3 +62,5 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+        role_hierarchy:
+            ROLE_ADMIN:    ROLE_USER

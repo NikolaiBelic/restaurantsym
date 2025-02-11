@@ -122,6 +122,7 @@
 				{% endif %}
 						<a class="nav-link" href="{{ path('app_customer_index') }}">Customers</a>
 					</li>
+					{% if is_granted('IS_AUTHENTICATED') %}
 					{% if app.request.pathinfo starts with '/food' %}
 					<li class="nav-item active">
 				{% else %}
@@ -129,6 +130,8 @@
 				{% endif %}
 						<a class="nav-link" href="{{ path('app_food_index') }}">Food</a>
 					</li>
+					{% endif %}
+
 					{% if is_granted('IS_AUTHENTICATED') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_logout') }}">Logout - {{ app.user.username }}</a>

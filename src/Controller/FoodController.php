@@ -32,7 +32,8 @@ final class FoodController extends AbstractController
         $fechaInicial = $request->request->get('fechaInicial');
         $fechaFinal = $request->request->get('fechaFinal');
         $busqueda = $request->request->get('busqueda');
-        $food = $foodRepository->findFood($busqueda, $fechaInicial, $fechaFinal);
+        $usuario = $this->getUser();
+        $food = $foodRepository->findFood($busqueda, $fechaInicial, $fechaFinal, $usuario);
         return $this->render('food/index.html.twig', [
             'food' => $food,
             'busqueda' => $busqueda,
@@ -58,6 +59,8 @@ final class FoodController extends AbstractController
             // Actualizamos el nombre del archivo en el objeto imagen al nuevo generado
             $food->setImagen($fileName);
             $food->setFecha(new \DateTimeImmutable('today'));
+            $usuario = $this->getUser();
+            $food->setUsuario($usuario);
             $entityManager->persist($food);
             $entityManager->flush();
 
@@ -100,6 +103,8 @@ final class FoodController extends AbstractController
     #[Route('/{id}', name: 'app_food_delete', methods: ['POST'])]
     public function delete(Request $request, Food $food, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         if ($this->isCsrfTokenValid('delete' . $food->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($food);
             $entityManager->flush();

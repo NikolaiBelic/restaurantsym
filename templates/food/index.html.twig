@@ -37,6 +37,7 @@
 			<th>Descripcion</th>
 			<th>Fecha</th>
 			<th>Precio</th>
+			<th>Usuario</th>
 			<th>actions</th>
 		</tr>
 	</thead>
@@ -50,6 +51,7 @@
 				<td>{{ food.descripcion }}</td>
 				<td>{{ food.fecha | date('d/m/Y') }}</td>
 				<td>{{ food.precio|number_format(2, '.', ',') }}</td>
+				<td>{{ food.usuario }}</td>
 				<td>
 					<a href="{{ path('app_food_show', {'id': food.id}) }}">show</a>
 					<a href="{{ path('app_food_edit', {'id': food.id}) }}">edit</a>

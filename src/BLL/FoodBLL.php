@@ -3,16 +3,20 @@
 namespace App\BLL;
 
 use App\Repository\FoodRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FoodBLL
 {
     private RequestStack $requestStack;
     private FoodRepository $foodRepository;
-    public function __construct(RequestStack $requestStack, FoodRepository $foodRepository)
+    private Security $security;
+
+    public function __construct(RequestStack $requestStack, FoodRepository $foodRepository, Security $security)
     {
         $this->requestStack = $requestStack;
         $this->foodRepository = $foodRepository;
+        $this->security = $security;
     }
     public function getFoodConOrdenacion(?string $ordenacion)
     {
@@ -39,6 +43,7 @@ class FoodBLL
             $ordenacion = 'id';
             $tipoOrdenacion = 'asc';
         }
-        return $this->foodRepository->findFoodConCategoria($ordenacion, $tipoOrdenacion);
+        $usuarioLogueado = $this->security->getUser();
+        return $this->foodRepository->findFoodConCategoria($ordenacion, $tipoOrdenacion, $usuarioLogueado);
     }
 }

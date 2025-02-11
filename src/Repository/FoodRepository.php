@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Food;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Food>
@@ -51,10 +52,28 @@ class FoodRepository extends ServiceEntityRepository
     /**
      * @return Food[] Returns an array of Imagen objects
      */
-    public function findLikeNombre(string $value): array
+    public function findFood(string $nombre, string $fechaInicial, $fechaFinal): array
     {
         $qb = $this->createQueryBuilder('i');
-        $qb->Where($qb->expr()->like('i.nombre', ':val'))->setParameter('val', '%' . $value . '%');
+        if (!is_null($nombre) && $nombre !== '') {
+            $qb->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('i.descripcion', ':val'),
+                    $qb->expr()->like('i.nombre', ':val')
+                )
+            )
+                ->setParameter('val', '%' . $nombre . '%');
+        }
+        if (!is_null($fechaInicial) && $fechaInicial !== '') {
+            $dtFechaInicial = DateTime::createFromFormat('Y-m-d', $fechaInicial);
+            $qb->andWhere($qb->expr()->gte('i.fecha', ':fechaInicial'))
+                ->setParameter('fechaInicial', $dtFechaInicial);
+        }
+        if (!is_null($fechaFinal) && $fechaFinal !== '') {
+            $dtFechaFinal = DateTime::createFromFormat('Y-m-d', $fechaFinal);
+            $qb->andWhere($qb->expr()->lte('i.fecha', ':fechaFinal'))
+                ->setParameter('fechaFinal', $dtFechaFinal);
+        }
         return $qb->getQuery()->getResult();
     }
 

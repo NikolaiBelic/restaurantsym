@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <th>Imagen</th>
-                <td>{{ food.imagen }}</td>
+                <td><img src="{{ asset(food.getUrlFood()) }}" alt="{{ food.imagen }}" width="100px"></td>
             </tr>
             <tr>
                 <th>Nombre</th>

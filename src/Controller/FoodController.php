@@ -18,7 +18,7 @@ final class FoodController extends AbstractController
 {
     #[Route('/', name: 'app_food_index', methods: ['GET'])]
     #[Route('/orden/{ordenacion}', name: 'app_food_index_ordenado', methods: ['GET'])]
-    public function index(FoodBLL $foodBLL, string $ordenacion = null): Response 
+    public function index(FoodBLL $foodBLL, string $ordenacion = null): Response
     {
         $food = $foodBLL->getFoodConOrdenacion($ordenacion);
         return $this->render('food/index.html.twig', [
@@ -29,10 +29,15 @@ final class FoodController extends AbstractController
     #[Route('/busqueda', name: 'app_food_index_busqueda', methods: ['POST'])]
     public function busqueda(Request $request, FoodRepository $foodRepository): Response
     {
+        $fechaInicial = $request->request->get('fechaInicial');
+        $fechaFinal = $request->request->get('fechaFinal');
         $busqueda = $request->request->get('busqueda');
-        $food = $foodRepository->findLikeNombre($busqueda);
+        $food = $foodRepository->findFood($busqueda, $fechaInicial, $fechaFinal);
         return $this->render('food/index.html.twig', [
-            'food' => $food
+            'food' => $food,
+            'busqueda' => $busqueda,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal
         ]);
     }
 
@@ -52,8 +57,12 @@ final class FoodController extends AbstractController
             $file->move($this->getParameter('images_directory_food'), $fileName);
             // Actualizamos el nombre del archivo en el objeto imagen al nuevo generado
             $food->setImagen($fileName);
+            $food->setFecha(new \DateTimeImmutable('today'));
             $entityManager->persist($food);
             $entityManager->flush();
+
+            $this->addFlash('mensaje', 'Se ha creado la imagen ' . $food->getImagen());
+
             return $this->redirectToRoute('app_food_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->render('food/new.html.twig', [

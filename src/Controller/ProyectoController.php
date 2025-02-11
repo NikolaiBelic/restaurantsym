@@ -11,10 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 class ProyectoController extends AbstractController
 {
     #[Route('/', name: 'sym_index')]
-    public function index(CustomerRepository $customerRepository)
+    public function index(CustomerRepository $customerRepository, FoodRepository $foodRepository)
     {
         return $this->render('index.view.html.twig', [
             'customers' => $customerRepository->findAll(),
+            'food' => $foodRepository->findAll()
         ]);
     }
 

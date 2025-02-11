@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Perfil de {{ user.username }}{% endblock %}
+
+{% block principal %}
+<style>
+    .profile-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .profile-wrapper img { border-radius: 50%; }
+</style>
+</div>
+<div class="profile-wrapper">
+    <h1>Perfil de {{ user.username }}</h1>
+
+    <div>
+        {% if user.avatar %}
+            <p><strong>Avatar:</strong> <img src="{{ asset(user.getUrlAvatar()) }}" alt="{{ user.avatar }}" width="150px"></p>
+            
+        {% else %}
+            <p><strong>Avatar:</strong> No tienes un avatar configurado.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

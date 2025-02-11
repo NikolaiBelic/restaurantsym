@@ -6,6 +6,7 @@
 parameters:
   images_directory_customers: '%kernel.project_dir%/public/images/customers'
   images_directory_food: '%kernel.project_dir%/public/images/food'
+  images_directory_avatar: '%kernel.project_dir%/public/images/avatar'
 
 services:
     # default configuration for services in *this* file

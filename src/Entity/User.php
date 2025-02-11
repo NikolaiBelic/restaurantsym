@@ -41,6 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Food::class, mappedBy: 'usuario', orphanRemoval: true)]
     private Collection $food;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $avatar = null;
+
+    const RUTA_IMAGENES_AVATAR = 'images/avatar/';
+
     public function __construct()
     {
         $this->food = new ArrayCollection();
@@ -154,5 +159,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function getUrlAvatar()
+    {
+        return self::RUTA_IMAGENES_AVATAR . $this->getAvatar();
     }
 }

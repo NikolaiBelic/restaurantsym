@@ -48,7 +48,7 @@
 					<a href="{{ path('app_profile') }}" class="user_link">
 						<i class="fa fa-user" aria-hidden="true"></i>
 					</a>
-					<a class="cart_link" href="#">
+					<a class="cart_link" href="{{ path('app_cart') }}">
 						<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewbox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
 							<g>
 								<g>
@@ -115,13 +115,15 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav  mx-auto ">
-				{% if app.request.pathinfo starts with '/customer' %}
-					<li class="nav-item active">
-				{% else %}
-					<li class="nav-item">
-				{% endif %}
-						<a class="nav-link" href="{{ path('app_customer_index') }}">Customers</a>
-					</li>
+				{% if is_granted('ROLE_ADMIN') %}
+                    {% if app.request.pathinfo starts with '/customer' %}
+                    <li class="nav-item active">
+                {% else %}
+                    <li class="nav-item">
+                {% endif %}
+                        <a class="nav-link" href="{{ path('app_customer_index') }}">Customers</a>
+                    </li>
+                    {% endif %}
 					{% if is_granted('IS_AUTHENTICATED') %}
 					{% if app.request.pathinfo starts with '/food' %}
 					<li class="nav-item active">

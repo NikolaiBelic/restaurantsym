@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\FoodRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FoodRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: FoodRepository::class)]
 class Food
@@ -36,6 +38,14 @@ class Food
     #[ORM\ManyToOne(inversedBy: 'food')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $usuario = null;
+
+    #[ORM\OneToMany(mappedBy: 'food', targetEntity: CartFood::class, cascade: ['persist', 'remove'])]
+    private Collection $cartFoods;
+
+    public function __construct()
+    {
+        $this->cartFoods = new ArrayCollection();
+    }
 
     const RUTA_IMAGENES_FOOD = 'images/food/';
 
@@ -129,6 +139,36 @@ class Food
     public function setUsuario(?User $usuario): static
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CartFood>
+     */
+    public function getCartFoods(): Collection
+    {
+        return $this->cartFoods;
+    }
+
+    public function addCartFood(CartFood $cartFood): self
+    {
+        if (!$this->cartFoods->contains($cartFood)) {
+            $this->cartFoods->add($cartFood);
+            $cartFood->setFood($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCartFood(CartFood $cartFood): self
+    {
+        if ($this->cartFoods->removeElement($cartFood)) {
+            // set the owning side to null (unless already changed)
+            if ($cartFood->getFood() === $this) {
+                $cartFood->setFood(null);
+            }
+        }
 
         return $this;
     }

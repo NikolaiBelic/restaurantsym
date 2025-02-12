@@ -11,6 +11,7 @@
 		<meta name="keywords" content=""/>
 		<meta name="description" content=""/>
 		<meta name="author" content=""/>
+		<link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
 		<title>
 			{% block title %}Restaurant
 			{% endblock %}
@@ -44,6 +45,13 @@
 		{% else %}
 		<body class="sub_page">
 			{% endif %}
+			{% for label, messages in app.flashes %}
+            <div class="alert alert-{{ label }}">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
 		<div class="hero_area">
 			<div class="bg-box">
 				<img src="{{asset('images/hero-bg.jpg') }}" alt="">
